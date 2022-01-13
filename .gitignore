@@ -1,0 +1,15 @@
+# ignore all of extension
+*.ipch
+*.ipch
+*.db-shm
+*.db-wal
+*.ipch
+*.lib
+*.pdb
+# ignore directories
+.vs/
+external/
+x64/
+LuxEngine/x64/
+LuxEngine/ImGUI/
+LuxEngine/lib/

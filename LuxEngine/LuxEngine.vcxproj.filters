@@ -94,13 +94,20 @@
     <Library Include="lib\assimp.lib" />
     <Library Include="lib\flecs_static.lib" />
     <Library Include="lib\glfw3.lib" />
+    <Library Include="lib\zlib.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="lib\assimp.pdb" />
     <None Include="lib\flecs_static.pdb" />
     <None Include="lib\glfw3.pdb" />
+    <None Include="lib\zlib.pdb" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ImGUI\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\image.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

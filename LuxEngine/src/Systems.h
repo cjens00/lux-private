@@ -1,35 +1,5 @@
 #pragma once
 
-// GLAD & GLFW
-#ifndef __glad_h_
-#include <glad/glad.h>
-#endif
-#ifndef _glfw3_h_
-#include "GLFW/glfw3.h"
-#endif
-
-// ImGui Backends
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-
-// Flecs
-#ifndef FLECS_H
-#ifndef flecs_STATIC
-#define flecs_STATIC
-#endif
-#include <flecs.h>
-#endif
-
-// STB - Image
-#include <stb_image.h>
-
-// Standard Library
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <format>
-#include <chrono>
-
 // Lux
 #include "Components.h"
 
@@ -43,8 +13,7 @@ namespace lux
 namespace lux::systems::helpers
 {
 	void PrintDebugMessage(const char* message);
-	void LoadPNGImageToRAM(const flecs::world& world, const char* filename);
-	void LoadPNGImageToGPU(const flecs::world& world);
+	void LoadPNGImage(const flecs::world& world, const char* filename);
 }
 
 namespace lux::systems::callbacks

@@ -19,14 +19,27 @@
 #include <flecs.h>
 #endif
 
+// STB - Image
+#include <stb_image.h>
+
 // ImGUI
 #include <imgui.h>
+
+// ImGui Backends
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
+// Standard Library
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <format>
+#include <chrono>
 
 namespace lux::tags
 {
 	struct isPNG {};
-	struct isInRAM {};
-	struct isInVRAM {};
+	struct isLoaded {};
 }
 
 namespace lux::components
@@ -34,6 +47,7 @@ namespace lux::components
 	struct Image
 	{
 		const char* file_name;
+		unsigned int glTexID;
 		int width;
 		int height;
 	};

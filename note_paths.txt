@@ -27,7 +27,7 @@ GLAD: $(SolutionDir)\external\glad\include\
 GLFW: $(SolutionDir)\external\glfw\include\
 GLM: $(SolutionDir)\external\glm\include\
 STB: $(SolutionDir)\external\stb\
-
+Zlib: $(SolutionDir)\external\assimp\cmakeBin\contrib\zlib
 ------------------
 Full list for VS:
 ------------------

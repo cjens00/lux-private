@@ -1,4 +1,8 @@
 #include <Systems.h>
+#ifdef STB_IMAGE_IMPLEMENTATION
+#undef STB_IMAGE_IMPLEMENTATION
+#endif
+#define STB_IMAGE_IMPLEMENTATION
 
 void lux::systems::helpers::PrintDebugMessage(const char* message)
 {
@@ -73,7 +77,8 @@ void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 void lux::LoadSystems(const flecs::world& world)
 {
 	world.set_target_fps(60.0);
-
+	lux::systems::helpers::LoadPNGImage(world,
+		"D:\\GameDevelopment\\Engine\\LuxEngine\\LuxEngine\\res\\textures\\image.png");
 	auto draw = world.system<components::Canvas>().kind(flecs::PreUpdate).each(
 		[](flecs::entity e, components::Canvas& c)
 		{
@@ -192,31 +197,46 @@ void lux::systems::gui::ShowCanvasPanel(const flecs::world& world)
 void lux::systems::gui::ShowMainMenu(const flecs::world& world)
 {
 	ImGui::Begin("Menu");
-	ImGui::BeginMenuBar();
+	world.each<components::Image>([](components::Image& i)
+	{
+		ImGui::Image(ImTextureID(i.glTexID), ImVec2(i.width, i.height));
+	});
 	ImGui::End();
 }
 
-void lux::systems::helpers::LoadPNGImageToRAM(const flecs::world& world, const char* filename)
+void lux::systems::helpers::LoadPNGImage(const flecs::world& world, const char* filename)
 {
-	int* num_channels;
+	int num_channels = 0;
 	auto image_entity = world.entity();
 	auto image = lux::components::Image{filename, 0, 0};
+	image_entity.add<tags::isPNG>();
 
-	std::ifstream image_fstream;
-	image_fstream.open(filename);
-	if (!image_fstream)
+	FILE* imfile;
+	fopen_s(&imfile, filename, "rb");
+
+	if (imfile == nullptr)
 	{
-		std::cerr << std::format("file loading [%s] failed.", filename) << std::endl;
+		std::cerr << std::format("Could not open [%s].", filename) << std::endl;
+		image_entity.destruct();
 	}
+	else
+	{
+		auto stb_img = stbi_load_from_file(imfile, &image.width,
+		                                   &image.height, &num_channels, 4);
 
-	FILE* input_file;
+		// Now load into GPU
+		unsigned int glTextureID = 0;
+		glGenTextures(1, &glTextureID);
+		glBindTexture(GL_TEXTURE_2D, glTextureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, stb_img);
+		glGenerateMipmap(GL_TEXTURE_2D);
 
+		// Free up the memory used by stb_image's loader
+		stbi_image_free(stb_img);
 
-	auto stb_img = stbi_load_from_file(input_file, &image.width,
-	                                   &image.height, num_channels, 4);
-	image_entity.set<lux::components::Image>({"file.name", 10, 20});
-}
-
-void lux::systems::helpers::LoadPNGImageToGPU(const flecs::world& world)
-{
+		// Lastly, add the component with the finalized data
+		image_entity.set<lux::components::Image>({
+			filename, glTextureID, image.width, image.height
+		});
+	}
 }

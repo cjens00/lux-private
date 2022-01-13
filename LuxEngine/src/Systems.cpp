@@ -21,7 +21,7 @@ void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	window = glfwCreateWindow(1920, 1200,
+	window = glfwCreateWindow(2560, 1600,
 	                          "Lux", nullptr, nullptr);
 	if (window == nullptr)
 	{
@@ -37,7 +37,7 @@ void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 		fprintf_s(stderr, "Lux::Error: %s", "Failed to load GLAD.");
 		return;
 	}
-	glViewport(0, 0, 1920, 1200);
+	glViewport(0, 0, 2560, 1600);
 	glfwSetFramebufferSizeCallback(window, lux::systems::callbacks::glfw_resize_viewport);
 	glfwSetErrorCallback(lux::systems::callbacks::glfw_error);
 
@@ -57,8 +57,8 @@ void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 	{
 		window, {io},
 		{0.0, 0},
-		{1920, 1200},
-		{1920, 1200}, {0}
+		{2560, 1200},
+		{2560, 1600}, {0}
 	};
 	world.set<components::Canvas>(canvas);
 
@@ -76,7 +76,8 @@ void lux::LoadSystems(const flecs::world& world)
 		{
 			lux::systems::DrawScene(e.world());
 			lux::systems::gui::DrawGUI(e.world());
-			systems::helpers::PrintDebugMessage("systems::Draw");
+			systems::helpers::PrintDebugMessage("systems::DrawScene");
+			systems::helpers::PrintDebugMessage("systems::gui::DrawGUI");
 		});
 
 	auto render = world.system<components::Canvas>().kind(flecs::OnUpdate).each(
@@ -99,9 +100,12 @@ void lux::LoadSystems(const flecs::world& world)
 			if (glfwWindowShouldClose(c.window))
 			{
 				systems::helpers::PrintDebugMessage("systems::should_close::true");
-				e.world().deactivate_systems();
+				e.world().quit();
 			}
-			systems::helpers::PrintDebugMessage("systems::should_close::false");
+			else
+			{
+				systems::helpers::PrintDebugMessage("systems::should_close::false");
+			}
 		});
 
 	draw.run();
@@ -109,7 +113,6 @@ void lux::LoadSystems(const flecs::world& world)
 	update_canvas.run();
 	should_close.run();
 }
-
 
 void lux::CleanUp()
 {
@@ -122,7 +125,6 @@ void lux::CleanUp()
 	glfwTerminate();
 }
 
-
 void lux::systems::gui::DrawGUI(const flecs::world& world)
 {
 	// ImGUI --------------------
@@ -131,12 +133,6 @@ void lux::systems::gui::DrawGUI(const flecs::world& world)
 	ImGui::NewFrame();
 
 	// Create GUI
-	// Draw windows here
-	{
-		ImGui::Begin("Demo window");
-		ImGui::Button("Hello!");
-		ImGui::End();
-	}
 	lux::systems::gui::ShowCanvasPanel(world);
 
 	// Render GUI
@@ -146,9 +142,12 @@ void lux::systems::gui::DrawGUI(const flecs::world& world)
 
 void lux::systems::gui::ShowCanvasPanel(const flecs::world& world)
 {
-	int x{}, y{};
+	auto c = *world.get<components::Canvas>();
 	ImGui::Begin("Canvas Data View");
-	ImGui::Text("Window Size: x:%d y:%d", x, y);
+	ImGui::Text("GLFW Window Address: %p", c.window);
+	ImGui::Text("Window Size: x:%d y:%d", c.window_size.x, c.window_size.y);
+	ImGui::Text("Viewport Size: x:%d y:%d", c.gl_viewport_size.x, c.gl_viewport_size.y);
+	ImGui::Text("FPS: %i", c.fps);
 	ImGui::End();
 }
 
@@ -169,7 +168,6 @@ void lux::systems::Render(const flecs::world& world)
 	glfwSwapBuffers(c->window);
 }
 
-
 void lux::systems::UpdateCanvas(const flecs::world& world)
 {
 	auto c = world.get_mut<components::Canvas>();
@@ -183,11 +181,13 @@ void lux::systems::UpdateCanvas(const flecs::world& world)
 		c->fps_counter.time_elapsed = 0.0f;
 		c->fps_counter.frames = 0;
 	}
+	c->fps_counter.frames++;
 	c->fps_counter.time_elapsed += world.delta_time();
 }
 
 void lux::systems::helpers::PrintDebugMessage(const char* message)
 {
-	auto now = std::chrono::system_clock::now();
-	std::cout << std::format("Debug[{0}]: {1}", now, message) << std::endl;
+	using namespace std::chrono;
+	auto now = floor<milliseconds>(system_clock::now());
+	std::cout << std::format("[{0}]: {1}", now, message) << std::endl;
 }

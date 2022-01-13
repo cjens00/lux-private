@@ -1,8 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
 
-#include "imgui.h"
+// GLM
+#include <glm/glm.hpp>
 
 // GLAD & GLFW
 #ifndef __glad_h_
@@ -19,6 +19,10 @@
 #endif
 #include <flecs.h>
 #endif
+
+// ImGUI
+#include <imgui.h>
+
 
 namespace lux::components
 {
@@ -40,6 +44,6 @@ namespace lux::components
 		FPSCounter fps_counter;
 		glm::ivec2 gl_viewport_size;
 		glm::ivec2 window_size;
-		glm::float32 fps;
+		int fps;
 	};
 }

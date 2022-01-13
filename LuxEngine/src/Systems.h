@@ -20,6 +20,16 @@
 #include <flecs.h>
 #endif
 
+// STB - Image
+#include <stb_image.h>
+
+// Standard Library
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <format>
+#include <chrono>
+
 // Lux
 #include "Components.h"
 
@@ -33,6 +43,8 @@ namespace lux
 namespace lux::systems::helpers
 {
 	void PrintDebugMessage(const char* message);
+	void LoadPNGImageToRAM(const flecs::world& world, const char* filename);
+	void LoadPNGImageToGPU(const flecs::world& world);
 }
 
 namespace lux::systems::callbacks
@@ -45,6 +57,7 @@ namespace lux::systems::gui
 {
 	void DrawGUI(const flecs::world& world);
 	void ShowCanvasPanel(const flecs::world& world);
+	void ShowMainMenu(const flecs::world& world);
 }
 
 namespace lux::systems

@@ -1,6 +1,5 @@
 #pragma once
 
-
 // GLM
 #include <glm/glm.hpp>
 
@@ -23,9 +22,22 @@
 // ImGUI
 #include <imgui.h>
 
+namespace lux::tags
+{
+	struct isPNG {};
+	struct isInRAM {};
+	struct isInVRAM {};
+}
 
 namespace lux::components
-{
+{	
+	struct Image
+	{
+		const char* file_name;
+		int width;
+		int height;
+	};
+
 	struct FPSCounter
 	{
 		float time_elapsed;

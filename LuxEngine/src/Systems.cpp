@@ -1,8 +1,11 @@
 #include <Systems.h>
-#include <iostream>
-#include <string>
-#include <format>
-#include <chrono>
+
+void lux::systems::helpers::PrintDebugMessage(const char* message)
+{
+	using namespace std::chrono;
+	auto now = floor<milliseconds>(system_clock::now());
+	std::cout << std::format("[{0}]: {1}", now, message) << std::endl;
+}
 
 void lux::systems::callbacks::glfw_resize_viewport(GLFWwindow* window, int width, int height)
 {
@@ -125,32 +128,6 @@ void lux::CleanUp()
 	glfwTerminate();
 }
 
-void lux::systems::gui::DrawGUI(const flecs::world& world)
-{
-	// ImGUI --------------------
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
-
-	// Create GUI
-	lux::systems::gui::ShowCanvasPanel(world);
-
-	// Render GUI
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void lux::systems::gui::ShowCanvasPanel(const flecs::world& world)
-{
-	auto c = *world.get<components::Canvas>();
-	ImGui::Begin("Canvas Data View");
-	ImGui::Text("GLFW Window Address: %p", c.window);
-	ImGui::Text("Window Size: x:%d y:%d", c.window_size.x, c.window_size.y);
-	ImGui::Text("Viewport Size: x:%d y:%d", c.gl_viewport_size.x, c.gl_viewport_size.y);
-	ImGui::Text("FPS: %i", c.fps);
-	ImGui::End();
-}
-
 void lux::systems::DrawScene(const flecs::world& world)
 {
 	// GLFW ---------------------
@@ -185,9 +162,61 @@ void lux::systems::UpdateCanvas(const flecs::world& world)
 	c->fps_counter.time_elapsed += world.delta_time();
 }
 
-void lux::systems::helpers::PrintDebugMessage(const char* message)
+void lux::systems::gui::DrawGUI(const flecs::world& world)
 {
-	using namespace std::chrono;
-	auto now = floor<milliseconds>(system_clock::now());
-	std::cout << std::format("[{0}]: {1}", now, message) << std::endl;
+	// ImGUI --------------------
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	// Create GUI
+	lux::systems::gui::ShowCanvasPanel(world);
+	lux::systems::gui::ShowMainMenu(world);
+
+	// Render GUI
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void lux::systems::gui::ShowCanvasPanel(const flecs::world& world)
+{
+	auto c = *world.get<components::Canvas>();
+	ImGui::Begin("Canvas Data View");
+	ImGui::Text("GLFW Window Address: %p", c.window);
+	ImGui::Text("Window Size: x:%d y:%d", c.window_size.x, c.window_size.y);
+	ImGui::Text("Viewport Size: x:%d y:%d", c.gl_viewport_size.x, c.gl_viewport_size.y);
+	ImGui::Text("FPS: %i", c.fps);
+	ImGui::End();
+}
+
+void lux::systems::gui::ShowMainMenu(const flecs::world& world)
+{
+	ImGui::Begin("Menu");
+	ImGui::BeginMenuBar();
+	ImGui::End();
+}
+
+void lux::systems::helpers::LoadPNGImageToRAM(const flecs::world& world, const char* filename)
+{
+	int* num_channels;
+	auto image_entity = world.entity();
+	auto image = lux::components::Image{filename, 0, 0};
+
+	std::ifstream image_fstream;
+	image_fstream.open(filename);
+	if (!image_fstream)
+	{
+		std::cerr << std::format("file loading [%s] failed.", filename) << std::endl;
+	}
+
+	FILE* input_file;
+
+
+	auto stb_img = stbi_load_from_file(input_file, &image.width,
+	                                   &image.height, num_channels, 4);
+	image_entity.set<lux::components::Image>({"file.name", 10, 20});
+}
+
+void lux::systems::helpers::LoadPNGImageToGPU(const flecs::world& world)
+{
 }

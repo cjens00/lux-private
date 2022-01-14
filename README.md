@@ -1,5 +1,5 @@
 # LX
-###### Version: dev-build-100 (unstable, private)
+###### Version: dev-build-110 (unstable, private)
 
 - MMOG Engine built with my own custom project in mind
 - Uses OpenGL 3.3 core API as rendering backend (implementation: GLFW/GLAD)

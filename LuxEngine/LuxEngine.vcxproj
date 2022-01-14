@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\src\;$(ProjectDir)\src\lux_tools\;$(ProjectDir)\ImGUI\;$(SolutionDir)\external\assimp\cmakeBin\include;$(SolutionDir)\external\assimp\include\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\dirent\;$(ProjectDir)\src\;$(ProjectDir)\src\lux_tools\;$(ProjectDir)\ImGUI\;$(SolutionDir)\external\assimp\cmakeBin\include;$(SolutionDir)\external\assimp\include\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)\ImGui\;$(SolutionDir)\external\glad\src\;$(VC_SourcePath);</SourcePath>
     <LibraryPath>$(ProjectDir)\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)\src\;$(ProjectDir)\src\lux_tools\;$(ProjectDir)\ImGUI\;$(SolutionDir)\external\assimp\cmakeBin\include;$(SolutionDir)\external\assimp\include\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\dirent\;$(ProjectDir)\src\;$(ProjectDir)\src\lux_tools\;$(ProjectDir)\ImGUI\;$(SolutionDir)\external\assimp\cmakeBin\include;$(SolutionDir)\external\assimp\include\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(ProjectDir)\ImGui\;$(SolutionDir)\external\glad\src\;$(VC_SourcePath);</SourcePath>
     <LibraryPath>$(ProjectDir)\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -160,10 +160,13 @@
     <ClCompile Include="ImGUI\imgui_draw.cpp" />
     <ClCompile Include="ImGUI\imgui_tables.cpp" />
     <ClCompile Include="ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="src\FileSystems.cpp" />
+    <ClCompile Include="src\GUISystems.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Systems.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dirent\dirent.h" />
     <ClInclude Include="src\Components.h" />
     <ClInclude Include="ImGUI\backends\imgui_impl_glfw.h" />
     <ClInclude Include="ImGUI\backends\imgui_impl_opengl3.h" />
@@ -174,6 +177,8 @@
     <ClInclude Include="ImGUI\imstb_rectpack.h" />
     <ClInclude Include="ImGUI\imstb_textedit.h" />
     <ClInclude Include="ImGUI\imstb_truetype.h" />
+    <ClInclude Include="src\FileSystems.h" />
+    <ClInclude Include="src\GUISystems.h" />
     <ClInclude Include="src\Systems.h" />
   </ItemGroup>
   <ItemGroup>

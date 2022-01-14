@@ -19,15 +19,15 @@
 #include <flecs.h>
 #endif
 
-// STB - Image
-#include <stb_image.h>
-
 // ImGUI
 #include <imgui.h>
 
 // ImGui Backends
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+
+// Dirent
+// #include <dirent.h>
 
 // Standard Library
 #include <iostream>
@@ -38,12 +38,17 @@
 
 namespace lux::tags
 {
-	struct isPNG {};
-	struct isLoaded {};
+	struct isPNG
+	{
+	};
+
+	struct isLoaded
+	{
+	};
 }
 
 namespace lux::components
-{	
+{
 	struct Image
 	{
 		const char* file_name;
@@ -65,11 +70,20 @@ namespace lux::components
 
 	struct Canvas
 	{
+		GLuint sv_fbo;
+		GLuint sv_rbo;
+		GLuint sv_texture;
+
 		GLFWwindow* window;
-		ImGUI imgui;
-		FPSCounter fps_counter;
+
 		glm::ivec2 gl_viewport_size;
 		glm::ivec2 window_size;
+		glm::ivec2 sv_size;
+		glm::ivec2 sv_position;
+
+		ImGUI imgui;
+
+		FPSCounter fps_counter;
 		int fps;
 	};
 }

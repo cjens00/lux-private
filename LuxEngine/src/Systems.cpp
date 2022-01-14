@@ -1,8 +1,5 @@
 #include <Systems.h>
-#ifdef STB_IMAGE_IMPLEMENTATION
-#undef STB_IMAGE_IMPLEMENTATION
-#endif
-#define STB_IMAGE_IMPLEMENTATION
+using namespace lux;
 
 void lux::systems::helpers::PrintDebugMessage(const char* message)
 {
@@ -10,6 +7,81 @@ void lux::systems::helpers::PrintDebugMessage(const char* message)
 	auto now = floor<milliseconds>(system_clock::now());
 	std::cout << std::format("[{0}]: {1}", now, message) << std::endl;
 }
+
+GLFWwindow* systems::helpers::LoadGLFW(GLFWwindow* &w_ptr)
+{
+	// --- Initialize GLFW and GLFW Window ---
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	w_ptr = glfwCreateWindow(2560, 1600,
+		"Lux", nullptr, nullptr);
+
+	if (w_ptr == nullptr)
+	{
+		fprintf_s(stderr, "Lux::Error: %s", "Failed to initialize GLFW window.");
+		glfwTerminate();
+		return nullptr;
+	}
+	glfwMakeContextCurrent(w_ptr);
+
+	if (!LoadGLAD())
+	{
+		return nullptr;
+	
+	}
+
+	glViewport(0, 0, 2560, 1600);
+	glfwSetFramebufferSizeCallback(w_ptr, systems::callbacks::glfw_resize_viewport);
+	glfwSetErrorCallback(systems::callbacks::glfw_error);
+	return w_ptr;
+}
+
+bool systems::helpers::LoadGLAD()
+{
+	// --- Load GLAD Wrapper ---
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		fprintf_s(stderr, "Lux::Error: %s", "Failed to load GLAD.");
+		return false;
+	}
+	else 
+		return true;
+}
+
+void systems::helpers::InitSVFrameBuffer(const flecs::world& world)
+{
+	auto c = world.get_mut<components::Canvas>();
+
+	// Setup sv_framebuffer ----------------------------------------
+	glGenFramebuffers(1, &c->sv_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, c->sv_fbo);
+
+	glGenTextures(1, &c->sv_texture);
+	glBindTexture(GL_TEXTURE_2D, c->sv_texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, c->sv_size.x,
+		c->sv_size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+		GL_TEXTURE_2D, c->sv_texture, 0);
+
+	glGenRenderbuffers(1, &c->sv_rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, c->sv_rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, c->sv_size.x, c->sv_size.y);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER,
+		GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, c->sv_rbo);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// --------------------------------------------------------------
+}
+
 
 void lux::systems::callbacks::glfw_resize_viewport(GLFWwindow* window, int width, int height)
 {
@@ -23,103 +95,27 @@ void lux::systems::callbacks::glfw_error(int error, const char* description)
 
 void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 {
-	// --- Initialize GLFW and GLFW Window ---
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	window = glfwCreateWindow(2560, 1600,
-	                          "Lux", nullptr, nullptr);
-	if (window == nullptr)
+	// Load GLFW
+	if (systems::helpers::LoadGLFW(window) == nullptr)
 	{
-		fprintf_s(stderr, "Lux::Error: %s", "Failed to initialize GLFW window.");
-		glfwTerminate();
 		return;
 	}
-	glfwMakeContextCurrent(window);
+	
+	// Load ImGUI
+	lux::gui::LoadImGUI(world, window);
 
-	// --- Load GLAD Wrapper ---
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		fprintf_s(stderr, "Lux::Error: %s", "Failed to load GLAD.");
-		return;
-	}
-	glViewport(0, 0, 2560, 1600);
-	glfwSetFramebufferSizeCallback(window, lux::systems::callbacks::glfw_resize_viewport);
-	glfwSetErrorCallback(lux::systems::callbacks::glfw_error);
-
-	// --- Initialize ImGUI ---
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	(void)io;
-
-	// Configure Style & Flags
-	io.FontGlobalScale = 2.0f;
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	ImGui::StyleColorsDark();
-
-	// --- Initialize the Canvas Singleton in ECS ---
-	lux::components::Canvas canvas =
-	{
-		window, {io},
-		{0.0, 0},
-		{2560, 1200},
-		{2560, 1600}, {0}
-	};
-	world.set<components::Canvas>(canvas);
-
-	// Setup ImGUI Platform/Renderer Backends
-	ImGui_ImplGlfw_InitForOpenGL(canvas.window, true);
-	ImGui_ImplOpenGL3_Init("#version 330");
+	// Create separate buffer for scene viewer
+	systems::helpers::InitSVFrameBuffer(world);
 }
 
 void lux::LoadSystems(const flecs::world& world)
 {
-	world.set_target_fps(60.0);
-	lux::systems::helpers::LoadPNGImage(world,
-		"D:\\GameDevelopment\\Engine\\LuxEngine\\LuxEngine\\res\\textures\\image.png");
-	auto draw = world.system<components::Canvas>().kind(flecs::PreUpdate).each(
-		[](flecs::entity e, components::Canvas& c)
-		{
-			lux::systems::DrawScene(e.world());
-			lux::systems::gui::DrawGUI(e.world());
-			systems::helpers::PrintDebugMessage("systems::DrawScene");
-			systems::helpers::PrintDebugMessage("systems::gui::DrawGUI");
-		});
+	world.set_target_fps(120.0);
 
-	auto render = world.system<components::Canvas>().kind(flecs::OnUpdate).each(
-		[](flecs::entity e, components::Canvas& c)
-		{
-			lux::systems::Render(e.world());
-			systems::helpers::PrintDebugMessage("systems::Render");
-		});
-
-	auto update_canvas = world.system<components::Canvas>().kind(flecs::PostUpdate).each(
-		[](flecs::entity e, components::Canvas& c)
-		{
-			systems::UpdateCanvas(e.world());
-			systems::helpers::PrintDebugMessage("systems::UpdateCanvas");
-		});
-
-	auto should_close = world.system<components::Canvas>().kind(flecs::OnStore).each(
-		[](flecs::entity e, components::Canvas& c)
-		{
-			if (glfwWindowShouldClose(c.window))
-			{
-				systems::helpers::PrintDebugMessage("systems::should_close::true");
-				e.world().quit();
-			}
-			else
-			{
-				systems::helpers::PrintDebugMessage("systems::should_close::false");
-			}
-		});
-
-	draw.run();
-	render.run();
-	update_canvas.run();
-	should_close.run();
+	systems::System_Draw(world);
+	systems::System_Render(world);
+	systems::System_UpdateMetrics(world);
+	systems::System_ShouldClose(world);
 }
 
 void lux::CleanUp()
@@ -133,24 +129,25 @@ void lux::CleanUp()
 	glfwTerminate();
 }
 
-void lux::systems::DrawScene(const flecs::world& world)
+void lux::DrawScene(const flecs::world& world)
 {
-	// GLFW ---------------------
-	glfwPollEvents();
-	glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	auto c = world.get_mut<components::Canvas>();
 
-	// TODO: Eventually, the rest of the scene needs to be drawn here:
-	// ---------------------------------------------------------------
+	// GLFW ---------------------
+	glBindFramebuffer(GL_FRAMEBUFFER, c->sv_fbo);
+	glfwPollEvents();
+	glClearColor(0.95f, 0.55f, 0.40f, 1.00f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void lux::systems::Render(const flecs::world& world)
+void lux::Render(const flecs::world& world)
 {
 	auto c = world.get_mut<components::Canvas>();
 	glfwSwapBuffers(c->window);
 }
 
-void lux::systems::UpdateCanvas(const flecs::world& world)
+void lux::UpdateMetrics(const flecs::world& world)
 {
 	auto c = world.get_mut<components::Canvas>();
 
@@ -167,76 +164,59 @@ void lux::systems::UpdateCanvas(const flecs::world& world)
 	c->fps_counter.time_elapsed += world.delta_time();
 }
 
-void lux::systems::gui::DrawGUI(const flecs::world& world)
+// Flecs Systems ------------------
+
+void systems::System_Draw(const flecs::world& world)
 {
-	// ImGUI --------------------
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
+	auto draw = world.system<components::Canvas>().kind(flecs::PreUpdate).each(
+		[](flecs::entity e, components::Canvas& c)
+		{
+			lux::DrawScene(e.world());
+			lux::gui::DrawGUI(e.world());
 
-	// Create GUI
-	lux::systems::gui::ShowCanvasPanel(world);
-	lux::systems::gui::ShowMainMenu(world);
-
-	// Render GUI
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-void lux::systems::gui::ShowCanvasPanel(const flecs::world& world)
-{
-	auto c = *world.get<components::Canvas>();
-	ImGui::Begin("Canvas Data View");
-	ImGui::Text("GLFW Window Address: %p", c.window);
-	ImGui::Text("Window Size: x:%d y:%d", c.window_size.x, c.window_size.y);
-	ImGui::Text("Viewport Size: x:%d y:%d", c.gl_viewport_size.x, c.gl_viewport_size.y);
-	ImGui::Text("FPS: %i", c.fps);
-	ImGui::End();
-}
-
-void lux::systems::gui::ShowMainMenu(const flecs::world& world)
-{
-	ImGui::Begin("Menu");
-	world.each<components::Image>([](components::Image& i)
-	{
-		ImGui::Image(ImTextureID(i.glTexID), ImVec2(i.width, i.height));
-	});
-	ImGui::End();
-}
-
-void lux::systems::helpers::LoadPNGImage(const flecs::world& world, const char* filename)
-{
-	int num_channels = 0;
-	auto image_entity = world.entity();
-	auto image = lux::components::Image{filename, 0, 0};
-	image_entity.add<tags::isPNG>();
-
-	FILE* imfile;
-	fopen_s(&imfile, filename, "rb");
-
-	if (imfile == nullptr)
-	{
-		std::cerr << std::format("Could not open [%s].", filename) << std::endl;
-		image_entity.destruct();
-	}
-	else
-	{
-		auto stb_img = stbi_load_from_file(imfile, &image.width,
-		                                   &image.height, &num_channels, 4);
-
-		// Now load into GPU
-		unsigned int glTextureID = 0;
-		glGenTextures(1, &glTextureID);
-		glBindTexture(GL_TEXTURE_2D, glTextureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, stb_img);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		// Free up the memory used by stb_image's loader
-		stbi_image_free(stb_img);
-
-		// Lastly, add the component with the finalized data
-		image_entity.set<lux::components::Image>({
-			filename, glTextureID, image.width, image.height
+			systems::helpers::PrintDebugMessage("systems::DrawScene");
+			systems::helpers::PrintDebugMessage("systems::gui::DrawGUI");
 		});
-	}
+	draw.run();
+}
+
+void systems::System_Render(const flecs::world& world)
+{
+	auto render = world.system<components::Canvas>().kind(flecs::OnUpdate).each(
+		[](flecs::entity e, components::Canvas& c)
+		{
+			lux::Render(e.world());
+
+			systems::helpers::PrintDebugMessage("systems::Render");
+		});
+	render.run();
+}
+
+void systems::System_UpdateMetrics(const flecs::world& world)
+{
+	auto update_canvas = world.system<components::Canvas>().kind(flecs::PostUpdate).each(
+		[](flecs::entity e, components::Canvas& c)
+		{
+			lux::UpdateMetrics(e.world());
+			systems::helpers::PrintDebugMessage("systems::UpdateCanvas");
+		});
+	update_canvas.run();
+}
+
+void systems::System_ShouldClose(const flecs::world& world)
+{
+	auto should_close = world.system<components::Canvas>().kind(flecs::OnStore).each(
+		[](flecs::entity e, components::Canvas& c)
+		{
+			if (glfwWindowShouldClose(c.window))
+			{
+				systems::helpers::PrintDebugMessage("systems::should_close::true");
+				e.world().quit();
+			}
+			else
+			{
+				systems::helpers::PrintDebugMessage("systems::should_close::false");
+			}
+		});
+	should_close.run();
 }

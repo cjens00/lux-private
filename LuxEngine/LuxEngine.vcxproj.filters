@@ -27,25 +27,25 @@
     <ClCompile Include="..\external\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\imgui.cpp">
+    <ClCompile Include="external\ImGUI\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\imgui_demo.cpp">
+    <ClCompile Include="external\ImGUI\imgui_demo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\imgui_draw.cpp">
+    <ClCompile Include="external\ImGUI\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\imgui_tables.cpp">
+    <ClCompile Include="external\ImGUI\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\imgui_widgets.cpp">
+    <ClCompile Include="external\ImGUI\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\backends\imgui_impl_opengl3.cpp">
+    <ClCompile Include="external\ImGUI\backends\imgui_impl_opengl3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImGUI\backends\imgui_impl_glfw.cpp">
+    <ClCompile Include="external\ImGUI\backends\imgui_impl_glfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Components.cpp">
@@ -62,46 +62,49 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ImGUI\imconfig.h">
+    <ClInclude Include="external\ImGUI\imconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\imgui.h">
+    <ClInclude Include="external\ImGUI\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\imgui_internal.h">
+    <ClInclude Include="external\ImGUI\imgui_internal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\imstb_rectpack.h">
+    <ClInclude Include="external\ImGUI\imstb_rectpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\imstb_textedit.h">
+    <ClInclude Include="external\ImGUI\imstb_textedit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\imstb_truetype.h">
+    <ClInclude Include="external\ImGUI\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\backends\imgui_impl_opengl3_loader.h">
+    <ClInclude Include="external\ImGUI\backends\imgui_impl_opengl3_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\backends\imgui_impl_opengl3.h">
+    <ClInclude Include="external\ImGUI\backends\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImGUI\backends\imgui_impl_glfw.h">
+    <ClInclude Include="external\ImGUI\backends\imgui_impl_glfw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components.h">
+    <ClInclude Include="include\Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Systems.h">
+    <ClInclude Include="include\Systems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileSystems.h">
+    <ClInclude Include="include\FileSystems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dirent\dirent.h">
+    <ClInclude Include="external\dirent\dirent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUISystems.h">
+    <ClInclude Include="include\GUISystems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external\cgltf\cgltf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -116,9 +119,10 @@
     <None Include="lib\flecs_static.pdb" />
     <None Include="lib\glfw3.pdb" />
     <None Include="lib\zlib.pdb" />
+    <None Include="res\tree.glb" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ImGUI\LICENSE.txt" />
+    <Text Include="external\ImGUI\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\image.png">

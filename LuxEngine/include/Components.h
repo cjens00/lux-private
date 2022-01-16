@@ -29,6 +29,9 @@
 // Dirent
 // #include <dirent.h>
 
+// glTF 2.0 Support
+#include <cgltf/cgltf.h>
+
 // Standard Library
 #include <iostream>
 #include <fstream>
@@ -57,6 +60,11 @@ namespace lux::components
 		int height;
 	};
 
+	struct ShaderFile
+	{
+		const char* text;
+	};
+
 	struct FPSCounter
 	{
 		float time_elapsed;
@@ -78,12 +86,16 @@ namespace lux::components
 
 		glm::ivec2 gl_viewport_size;
 		glm::ivec2 window_size;
-		glm::ivec2 sv_size;
-		glm::ivec2 sv_position;
+		ImVec2 sv_size;
 
 		ImGUI imgui;
 
 		FPSCounter fps_counter;
 		int fps;
+	};
+
+	struct GLTF
+	{
+		cgltf_data* data;
 	};
 }

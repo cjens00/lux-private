@@ -106,6 +106,9 @@ void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 
 	// Create separate buffer for scene viewer
 	systems::helpers::InitSVFrameBuffer(world);
+
+	// Load GLTF test file
+	file::LoadGLTF(world, "res/tree.glb");
 }
 
 void lux::LoadSystems(const flecs::world& world)
@@ -136,7 +139,7 @@ void lux::DrawScene(const flecs::world& world)
 	// GLFW ---------------------
 	glBindFramebuffer(GL_FRAMEBUFFER, c->sv_fbo);
 	glfwPollEvents();
-	glClearColor(0.95f, 0.55f, 0.40f, 1.00f);
+	glClearColor(0.40f, 0.40f, 0.40f, 1.00f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

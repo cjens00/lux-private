@@ -1,3 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
+#define CGLTF_IMPLEMENTATION
+
+#include <filesystem>
 #include <FileSystems.h>
 using namespace lux;
 
@@ -36,4 +40,36 @@ void file::LoadPNGImage(const flecs::world& world, const char* filename)
 			filename, glTextureID, image.width, image.height
 		});
 	}
+}
+
+void file::LoadShaderFile(const flecs::world& world, const char* filename)
+{
+	if (!std::filesystem::exists(filename))
+	{
+		auto io = ImGui::GetIO();
+		ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x * 0.5f, io.DisplaySize.y * 0.5f),
+		                        ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+		ImGui::BeginPopup("Error", ImGuiWindowFlags_NoResize);
+		ImGui::SetWindowSize(ImVec2(io.DisplaySize.x * 0.2f, io.DisplaySize.y * 0.2f));
+		ImGui::Text("File not found at path given: %s", filename);
+	}
+	else
+	{
+		std::ifstream infile(filename);
+		std::stringstream buffer;
+		buffer << infile.rdbuf();
+
+		components::ShaderFile shader_file{buffer.str().c_str()};
+		world.entity().add<components::ShaderFile>();
+	}
+}
+
+void file::LoadGLTF(const flecs::world& world, const char* filename)
+{
+	std::cout << std::filesystem::current_path() << std::endl;
+	components::GLTF file_gltf;
+	cgltf_options options{cgltf_file_type_glb, 0, {},{}};
+	cgltf_parse_file(&options, filename, &file_gltf.data);
+	auto e = world.entity<components::GLTF>("GLTF_test");
+	//e.set(file_gltf);
 }

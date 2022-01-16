@@ -14,5 +14,7 @@
 namespace lux::file
 {
 	void LoadPNGImage(const flecs::world& world, const char* filename);
+	void LoadShaderFile(const flecs::world& world, const char* filename);
+	void LoadGLTF(const flecs::world& world, const char* filename);
 }
 

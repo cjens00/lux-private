@@ -78,14 +78,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\dirent\;$(ProjectDir)\src\;$(ProjectDir)\src\lux_tools\;$(ProjectDir)\ImGUI\;$(SolutionDir)\external\assimp\cmakeBin\include;$(SolutionDir)\external\assimp\include\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <SourcePath>$(ProjectDir)\ImGui\;$(SolutionDir)\external\glad\src\;$(VC_SourcePath);</SourcePath>
+    <IncludePath>$(ProjectDir)\external\;$(ProjectDir)\include\;$(ProjectDir)\external\ImGUI\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)\external\ImGui\;$(SolutionDir)\external\glad\src\;$(VC_SourcePath);</SourcePath>
     <LibraryPath>$(ProjectDir)\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)\dirent\;$(ProjectDir)\src\;$(ProjectDir)\src\lux_tools\;$(ProjectDir)\ImGUI\;$(SolutionDir)\external\assimp\cmakeBin\include;$(SolutionDir)\external\assimp\include\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <SourcePath>$(ProjectDir)\ImGui\;$(SolutionDir)\external\glad\src\;$(VC_SourcePath);</SourcePath>
+    <IncludePath>$(ProjectDir)\external\;$(ProjectDir)\include\;$(ProjectDir)\external\ImGUI\;$(SolutionDir)\external\flecs\include\;$(SolutionDir)\external\glad\include\;$(SolutionDir)\external\glfw\include\;$(SolutionDir)\external\glm\include\;$(SolutionDir)\external\stb\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)\external\ImGui\;$(SolutionDir)\external\glad\src\;$(VC_SourcePath);</SourcePath>
     <LibraryPath>$(ProjectDir)\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,7 +128,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>zlib.lib;assimp.lib;flecs_static.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;flecs_static.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,39 +147,40 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>zlib.lib;assimp.lib;flecs_static.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;flecs_static.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\external\glad\src\glad.c" />
     <ClCompile Include="src\Components.cpp" />
-    <ClCompile Include="ImGUI\backends\imgui_impl_glfw.cpp" />
-    <ClCompile Include="ImGUI\backends\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="ImGUI\imgui.cpp" />
-    <ClCompile Include="ImGUI\imgui_demo.cpp" />
-    <ClCompile Include="ImGUI\imgui_draw.cpp" />
-    <ClCompile Include="ImGUI\imgui_tables.cpp" />
-    <ClCompile Include="ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="external\ImGUI\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="external\ImGUI\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="external\ImGUI\imgui.cpp" />
+    <ClCompile Include="external\ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="external\ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="external\ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="external\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="src\FileSystems.cpp" />
     <ClCompile Include="src\GUISystems.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Systems.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dirent\dirent.h" />
-    <ClInclude Include="src\Components.h" />
-    <ClInclude Include="ImGUI\backends\imgui_impl_glfw.h" />
-    <ClInclude Include="ImGUI\backends\imgui_impl_opengl3.h" />
-    <ClInclude Include="ImGUI\backends\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="ImGUI\imconfig.h" />
-    <ClInclude Include="ImGUI\imgui.h" />
-    <ClInclude Include="ImGUI\imgui_internal.h" />
-    <ClInclude Include="ImGUI\imstb_rectpack.h" />
-    <ClInclude Include="ImGUI\imstb_textedit.h" />
-    <ClInclude Include="ImGUI\imstb_truetype.h" />
-    <ClInclude Include="src\FileSystems.h" />
-    <ClInclude Include="src\GUISystems.h" />
-    <ClInclude Include="src\Systems.h" />
+    <ClInclude Include="external\cgltf\cgltf.h" />
+    <ClInclude Include="external\dirent\dirent.h" />
+    <ClInclude Include="include\Components.h" />
+    <ClInclude Include="external\ImGUI\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="external\ImGUI\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="external\ImGUI\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="external\ImGUI\imconfig.h" />
+    <ClInclude Include="external\ImGUI\imgui.h" />
+    <ClInclude Include="external\ImGUI\imgui_internal.h" />
+    <ClInclude Include="external\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="external\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="external\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="include\FileSystems.h" />
+    <ClInclude Include="include\GUISystems.h" />
+    <ClInclude Include="include\Systems.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\assimp.lib" />
@@ -192,9 +193,10 @@
     <None Include="lib\flecs_static.pdb" />
     <None Include="lib\glfw3.pdb" />
     <None Include="lib\zlib.pdb" />
+    <None Include="res\tree.glb" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ImGUI\LICENSE.txt" />
+    <Text Include="external\ImGUI\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\image.png" />

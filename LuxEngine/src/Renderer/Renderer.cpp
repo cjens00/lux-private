@@ -23,3 +23,11 @@ void lux::Renderer::SetGLWindow(std::shared_ptr<GLFWwindow*> sptr_gl_window)
 	std::weak_ptr weak_gl_window = sptr_gl_window;
 	this->gl_window = weak_gl_window.lock();
 }
+
+void lux::Renderer::Update()
+{
+	glClearColor(0.4f,0.5f,0.7f,1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glfwSwapBuffers(*gl_window);
+	glfwPollEvents();
+}

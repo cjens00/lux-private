@@ -63,7 +63,17 @@ void lux::Clock::Run()
 		this->Tick();
 	}
 	state = 1;
+	if (updatePhysics) updatePhysics = false;
+	else updatePhysics = true;
 	pass_end = steady_clock::now();
-	std::this_thread::sleep_for(target_frame_time - (pass_end - pass_start));
-	Run();
+	auto x = (target_frame_time - (pass_end - pass_start));
+	std::this_thread::sleep_for(x);
+}
+
+void lux::Clock::AddCallback(int clock_state, void_function vf)
+{
+	if(clock_state == Update)
+	{
+		callbacks_update.emplace_back(vf);
+	}
 }

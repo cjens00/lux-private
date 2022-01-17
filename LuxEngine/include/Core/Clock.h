@@ -36,6 +36,6 @@ namespace lux
 		Clock(float t_fps);
 		void Run();
 		void Tick();
-		void AddCallback(int clock_state, void (func)(void));
+		void AddCallback(int clock_state, void_function vf);
 	};
 }

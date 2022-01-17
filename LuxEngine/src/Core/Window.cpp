@@ -7,8 +7,8 @@ lux::Window::Window(int width, int height)
 	size.y = height;
 	state = 0;
 	gl_window = nullptr;
-	this->Initialize();
 	clock = {60.0f};
+	this->Initialize();
 }
 
 
@@ -42,24 +42,31 @@ void lux::Window::Initialize()
 	}
 
 	glViewport(0, 0, size.x, size.y);
-	SetupCallbacks();
 	renderer.SetGLWindow(gl_window);
+	SetupCallbacks();
 }
 
 void lux::Window::SetupCallbacks()
 {
 	glfwSetFramebufferSizeCallback(*gl_window, [](GLFWwindow* window, int width, int height)
 	{
-			glViewport(0, 0, width, height);
+		glViewport(0, 0, width, height);
 	});
 
 	glfwSetErrorCallback([](int ec, const char* description)
 	{
-			std::cerr << ec << description << std::endl;
+		std::cerr << ec << description << std::endl;
+	});
+	clock.AddCallback(Clock_States::Update, [&]()
+	{
+		renderer.Update();
 	});
 }
 
 void lux::Window::Start()
 {
-	clock.Run();
+	while(!glfwWindowShouldClose(*gl_window))
+	{
+		clock.Run();
+	}
 }

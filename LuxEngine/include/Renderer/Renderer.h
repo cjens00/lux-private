@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 
+#ifndef __glad_h_
+#include <glad/glad.h>
+#endif
+
 #include <Core/Clock.h>
 #include <Renderer/Framebuffer.h>
 #include <GLFW/glfw3.h>
@@ -21,5 +25,6 @@ namespace lux
 		Renderer();
 		glm::ivec2 GetGLVersion() const;
 		void SetGLWindow(std::shared_ptr<GLFWwindow*> sptr_gl_window);
+		void Update();
 	};
 }

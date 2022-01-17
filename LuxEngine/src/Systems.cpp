@@ -1,4 +1,5 @@
 #include <Systems.h>
+
 using namespace lux;
 
 void lux::systems::helpers::PrintDebugMessage(const char* message)
@@ -8,7 +9,7 @@ void lux::systems::helpers::PrintDebugMessage(const char* message)
 	std::cout << std::format("[{0}]: {1}", now, message) << std::endl;
 }
 
-GLFWwindow* systems::helpers::LoadGLFW(GLFWwindow* &w_ptr)
+GLFWwindow* systems::helpers::LoadGLFW(GLFWwindow* & w_ptr)
 {
 	// --- Initialize GLFW and GLFW Window ---
 	glfwInit();
@@ -16,7 +17,7 @@ GLFWwindow* systems::helpers::LoadGLFW(GLFWwindow* &w_ptr)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	w_ptr = glfwCreateWindow(2560, 1600,
-		"Lux", nullptr, nullptr);
+	                         "Lux", nullptr, nullptr);
 
 	if (w_ptr == nullptr)
 	{
@@ -29,7 +30,6 @@ GLFWwindow* systems::helpers::LoadGLFW(GLFWwindow* &w_ptr)
 	if (!LoadGLAD())
 	{
 		return nullptr;
-	
 	}
 
 	glViewport(0, 0, 2560, 1600);
@@ -46,7 +46,7 @@ bool systems::helpers::LoadGLAD()
 		fprintf_s(stderr, "Lux::Error: %s", "Failed to load GLAD.");
 		return false;
 	}
-	else 
+	else
 		return true;
 }
 
@@ -61,19 +61,19 @@ void systems::helpers::InitSVFrameBuffer(const flecs::world& world)
 	glGenTextures(1, &c->sv_texture);
 	glBindTexture(GL_TEXTURE_2D, c->sv_texture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, c->sv_size.x,
-		c->sv_size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+	             c->sv_size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-		GL_TEXTURE_2D, c->sv_texture, 0);
+	                       GL_TEXTURE_2D, c->sv_texture, 0);
 
 	glGenRenderbuffers(1, &c->sv_rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, c->sv_rbo);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, c->sv_size.x, c->sv_size.y);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-		GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, c->sv_rbo);
+	                          GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, c->sv_rbo);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
@@ -100,7 +100,7 @@ void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 	{
 		return;
 	}
-	
+
 	// Load ImGUI
 	lux::gui::LoadImGUI(world, window);
 
@@ -108,7 +108,11 @@ void lux::Initialize(const flecs::world& world, GLFWwindow* window)
 	systems::helpers::InitSVFrameBuffer(world);
 
 	// Load GLTF test file
-	file::LoadGLTF(world, "res/tree.glb");
+	components::Shader shader{};
+	shader.GenerateShader("res/shaders/vert.glsl", 
+		"res/shaders/frag.glsl", nullptr);
+	world.entity().set(&shader);
+	file::gltf::LoadGLTF(world, "res/tree.glb");
 }
 
 void lux::LoadSystems(const flecs::world& world)
@@ -135,12 +139,15 @@ void lux::CleanUp()
 void lux::DrawScene(const flecs::world& world)
 {
 	auto c = world.get_mut<components::Canvas>();
-
-	// GLFW ---------------------
 	glBindFramebuffer(GL_FRAMEBUFFER, c->sv_fbo);
 	glfwPollEvents();
 	glClearColor(0.40f, 0.40f, 0.40f, 1.00f);
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	// Draw ------------------------------------------------------------
+
+	// End Draw --------------------------------------------------------
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

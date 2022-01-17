@@ -3,7 +3,6 @@
 // Lux
 #include <Components.h>
 #include <GUISystems.h>
-#include <FileSystems.h>
 
 namespace lux
 {

@@ -152,54 +152,52 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\external\glad\src\glad.c" />
-    <ClCompile Include="src\Components.cpp" />
-    <ClCompile Include="external\ImGUI\backends\imgui_impl_glfw.cpp" />
-    <ClCompile Include="external\ImGUI\backends\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="external\ImGUI\imgui.cpp" />
-    <ClCompile Include="external\ImGUI\imgui_demo.cpp" />
-    <ClCompile Include="external\ImGUI\imgui_draw.cpp" />
-    <ClCompile Include="external\ImGUI\imgui_tables.cpp" />
-    <ClCompile Include="external\ImGUI\imgui_widgets.cpp" />
-    <ClCompile Include="src\FileSystems.cpp" />
-    <ClCompile Include="src\GUISystems.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Renderer\RenderObject.cpp" />
+    <ClCompile Include="src\Core\Clock.cpp" />
+    <ClCompile Include="src\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Renderer\Material.cpp" />
+    <ClCompile Include="src\Renderer\Mesh.cpp" />
+    <ClCompile Include="src\Input\Mouse.cpp" />
+    <ClCompile Include="src\Input\Keyboard.cpp" />
+    <ClCompile Include="src\Renderer\Model.cpp" />
+    <ClCompile Include="src\Renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\Core\Scene.cpp" />
+    <ClCompile Include="src\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Systems.cpp" />
+    <ClCompile Include="src\Core\Window.cpp" />
+    <ClCompile Include="src\Renderer\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Core\Clock.h" />
     <ClInclude Include="external\cgltf\cgltf.h" />
-    <ClInclude Include="external\dirent\dirent.h" />
-    <ClInclude Include="include\Components.h" />
-    <ClInclude Include="external\ImGUI\backends\imgui_impl_glfw.h" />
-    <ClInclude Include="external\ImGUI\backends\imgui_impl_opengl3.h" />
-    <ClInclude Include="external\ImGUI\backends\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="external\ImGUI\imconfig.h" />
-    <ClInclude Include="external\ImGUI\imgui.h" />
-    <ClInclude Include="external\ImGUI\imgui_internal.h" />
-    <ClInclude Include="external\ImGUI\imstb_rectpack.h" />
-    <ClInclude Include="external\ImGUI\imstb_textedit.h" />
-    <ClInclude Include="external\ImGUI\imstb_truetype.h" />
-    <ClInclude Include="include\FileSystems.h" />
-    <ClInclude Include="include\GUISystems.h" />
+    <ClInclude Include="include\Renderer\Framebuffer.h" />
     <ClInclude Include="include\Systems.h" />
+    <ClInclude Include="include\Renderer\Renderer.h" />
+    <ClInclude Include="include\Core\Scene.h" />
+    <ClInclude Include="include\Renderer\Model.h" />
+    <ClInclude Include="include\Input\Keyboard.h" />
+    <ClInclude Include="include\Input\Mouse.h" />
+    <ClInclude Include="include\Renderer\Mesh.h" />
+    <ClInclude Include="include\Renderer\Material.h" />
+    <ClInclude Include="include\Renderer\Shader.h" />
+    <ClInclude Include="include\Core\Window.h" />
+    <ClInclude Include="include\Renderer\Texture.h" />
+    <ClInclude Include="include\Renderer\RenderObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="lib\assimp.lib" />
     <Library Include="lib\flecs_static.lib" />
     <Library Include="lib\glfw3.lib" />
-    <Library Include="lib\zlib.lib" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="lib\assimp.pdb" />
     <None Include="lib\flecs_static.pdb" />
     <None Include="lib\glfw3.pdb" />
-    <None Include="lib\zlib.pdb" />
-    <None Include="res\tree.glb" />
+    <None Include="res\shaders\default_shader\frag.glsl" />
+    <None Include="res\shaders\default_shader\vert.glsl" />
+    <None Include="res\assets\models\tree.glb" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="external\ImGUI\LICENSE.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="res\textures\image.png" />
+    <Image Include="res\assets\textures\png\image.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

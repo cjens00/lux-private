@@ -60,3 +60,11 @@ void lux::Window::SetupCallbacks()
 			std::cerr << ec << description << std::endl;
 	});
 }
+
+void lux::Window::Update()
+{
+
+
+
+	Update();
+}

@@ -166,6 +166,7 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Core\TimedWorkerThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Core\Clock.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="include\Core\Window.h" />
     <ClInclude Include="include\Renderer\Texture.h" />
     <ClInclude Include="include\Renderer\RenderObject.h" />
+    <ClInclude Include="include\Core\TimedWorkerThread.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\flecs_static.lib" />

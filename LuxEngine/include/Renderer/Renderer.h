@@ -12,13 +12,14 @@ namespace lux
 {
 	class Renderer
 	{
-		int gl_version_maj = 3;
-		int gl_version_min = 3;
+		const int gl_version_maj = 3;
+		const int gl_version_min = 3;
 		std::string glsl_version = "#version 330";
 		std::shared_ptr<GLFWwindow*> gl_window;
 		std::vector<lux::Framebuffer> frame_buffers;
 	public:
 		Renderer();
-		glm::ivec2 Initialize();
+		glm::ivec2 GetGLVersion() const;
+		void SetGLWindow(std::shared_ptr<GLFWwindow*> sptr_gl_window);
 	};
 }

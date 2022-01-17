@@ -9,14 +9,14 @@ lux::Window::Window(int width, int height)
 	clock = {};
 	state = 0;
 
-	renderer = {};
 	gl_window = nullptr;
+	this->Initialize();
 }
 
 
 void lux::Window::Initialize()
 {
-	glm::ivec2 gl_version = renderer.Initialize();
+	glm::ivec2 gl_version = renderer.GetGLVersion();
 
 	glfwInit();
 
@@ -45,6 +45,7 @@ void lux::Window::Initialize()
 
 	glViewport(0, 0, size.x, size.y);
 	SetupCallbacks();
+	renderer.SetGLWindow(gl_window);
 }
 
 void lux::Window::SetupCallbacks()

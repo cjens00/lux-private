@@ -164,7 +164,6 @@
     <ClCompile Include="src\Core\Scene.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Systems.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
     <ClCompile Include="src\Renderer\Texture.cpp" />
   </ItemGroup>
@@ -172,7 +171,6 @@
     <ClInclude Include="include\Core\Clock.h" />
     <ClInclude Include="external\cgltf\cgltf.h" />
     <ClInclude Include="include\Renderer\Framebuffer.h" />
-    <ClInclude Include="include\Systems.h" />
     <ClInclude Include="include\Renderer\Renderer.h" />
     <ClInclude Include="include\Core\Scene.h" />
     <ClInclude Include="include\Renderer\Model.h" />

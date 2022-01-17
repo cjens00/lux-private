@@ -20,8 +20,8 @@ namespace lux
 		std::shared_ptr<GLFWwindow*> gl_window;
 	public:
 		Window(int width, int height);
+		void Start();
 	private:
-		void Update();
 		void Initialize();
 		void SetupCallbacks();
 	};

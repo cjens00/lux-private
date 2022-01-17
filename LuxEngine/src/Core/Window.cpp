@@ -5,12 +5,10 @@ lux::Window::Window(int width, int height)
 {
 	size.x = width;
 	size.y = height;
-
-	clock = {};
 	state = 0;
-
 	gl_window = nullptr;
 	this->Initialize();
+	clock = {60.0f};
 }
 
 
@@ -30,13 +28,13 @@ void lux::Window::Initialize()
 		                 "XLV [Untitled]", nullptr, nullptr)
 	);
 
-	if (gl_window == nullptr)
+	if (*gl_window == nullptr)
 	{
 		std::cerr << "Failed to initialize GLFW window." << std::endl;
 		glfwTerminate();
 	}
 
-	glfwMakeContextCurrent((GLFWwindow*)(gl_window.get()));
+	glfwMakeContextCurrent(*gl_window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -50,7 +48,7 @@ void lux::Window::Initialize()
 
 void lux::Window::SetupCallbacks()
 {
-	glfwSetFramebufferSizeCallback((GLFWwindow*)(gl_window.get()), [](GLFWwindow* window, int width, int height)
+	glfwSetFramebufferSizeCallback(*gl_window, [](GLFWwindow* window, int width, int height)
 	{
 			glViewport(0, 0, width, height);
 	});
@@ -61,10 +59,7 @@ void lux::Window::SetupCallbacks()
 	});
 }
 
-void lux::Window::Update()
+void lux::Window::Start()
 {
-
-
-
-	Update();
+	clock.Run();
 }

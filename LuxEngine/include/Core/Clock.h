@@ -32,6 +32,7 @@ namespace lux
 		std::vector<void_function> callbacks_postupdate;
 		std::vector<void_function> callbacks_physicsupdate;
 	public:
+		Clock() = default;
 		Clock(float t_fps);
 		void Run();
 		void Tick();

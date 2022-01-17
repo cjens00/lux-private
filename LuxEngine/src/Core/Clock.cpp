@@ -14,26 +14,35 @@ void lux::Clock::Tick()
 	switch (state)
 	{
 	case Start:
-		for(auto fn: callbacks_start)
+
+		for (auto fn : callbacks_start)
 		{
 			fn();
 		}
+		break;
 	case PreUpdate:
+
 		for (auto fn : callbacks_preupdate)
 		{
 			fn();
 		}
+		break;
 	case Update:
+
 		for (auto fn : callbacks_update)
 		{
 			fn();
 		}
+		break;
 	case PostUpdate:
+
 		for (auto fn : callbacks_postupdate)
 		{
 			fn();
 		}
+		break;
 	case PhysicsUpdate:
+
 		if (updatePhysics)
 		{
 			for (auto fn : callbacks_physicsupdate)
@@ -41,7 +50,7 @@ void lux::Clock::Tick()
 				fn();
 			}
 		}
-		state = 0;
+		break;
 	}
 	state++;
 }
@@ -53,6 +62,7 @@ void lux::Clock::Run()
 	{
 		this->Tick();
 	}
+	state = 1;
 	pass_end = steady_clock::now();
 	std::this_thread::sleep_for(target_frame_time - (pass_end - pass_start));
 	Run();

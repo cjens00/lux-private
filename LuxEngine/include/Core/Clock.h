@@ -24,14 +24,15 @@ namespace lux
 		time_point<steady_clock> pass_end;
 		duration<float, std::milli> target_frame_time = 9.0ms;
 
-		void* callback_start;
-		void* callback_preupdate;
-		void* callback_update;
-		void* callback_postupdate;
-		void* callback_physicsupdate;
+		std::vector<void()> callbacks_start;
+		std::vector<void()> callbacks_preupdate;
+		std::vector<void()> callbacks_update;
+		std::vector<void()> callbacks_postupdate;
+		std::vector<void()> callbacks_physicsupdate;
 	public:
 		Clock(float t_fps);
 		void Run();
-		int Tick();
+		void Tick();
+		void AddCallback(int clock_state, void (func)(void));
 	};
 }

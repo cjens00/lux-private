@@ -9,25 +9,37 @@ lux::Clock::Clock(float t_fps)
 	};
 }
 
-int lux::Clock::Tick()
+void lux::Clock::Tick()
 {
 	switch (state)
 	{
 	case Start:
-		callback_start;
+		for(auto fn: callbacks_start)
+		{
+			fn();
+		}
 	case PreUpdate:
-		callback_preupdate;
+		for (auto fn : callbacks_preupdate)
+		{
+			fn();
+		}
 	case Update:
-		callback_update;
+		for (auto fn : callbacks_update)
+		{
+			fn();
+		}
 	case PostUpdate:
-		callback_postupdate;
+		for (auto fn : callbacks_postupdate)
+		{
+			fn();
+		}
 	case PhysicsUpdate:
 		if (updatePhysics)
 		{
-			callback_physicsupdate;
-		}
-		else
-		{
+			for (auto fn : callbacks_physicsupdate)
+			{
+				fn();
+			}
 		}
 		state = 0;
 	}

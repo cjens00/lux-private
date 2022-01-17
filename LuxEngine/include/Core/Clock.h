@@ -1,11 +1,13 @@
 #pragma once
 #include <chrono>
+#include <functional>
 #include <thread>
 
 namespace lux
 {
 	using namespace std::chrono;
 	using namespace std::chrono_literals;
+	typedef std::function<void(void)> void_function;
 
 	enum Clock_States
 	{
@@ -24,11 +26,11 @@ namespace lux
 		time_point<steady_clock> pass_end;
 		duration<float, std::milli> target_frame_time = 9.0ms;
 
-		std::vector<void()> callbacks_start;
-		std::vector<void()> callbacks_preupdate;
-		std::vector<void()> callbacks_update;
-		std::vector<void()> callbacks_postupdate;
-		std::vector<void()> callbacks_physicsupdate;
+		std::vector<void_function> callbacks_start;
+		std::vector<void_function> callbacks_preupdate;
+		std::vector<void_function> callbacks_update;
+		std::vector<void_function> callbacks_postupdate;
+		std::vector<void_function> callbacks_physicsupdate;
 	public:
 		Clock(float t_fps);
 		void Run();

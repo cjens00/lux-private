@@ -9,7 +9,8 @@
 
 namespace lux
 {
-	// Always owned by Renderer. TODO: Implement a Scene Manager class
+	// Always owned by Renderer.
+	// TODO: Implement a Scene Manager class
 	class Scene
 	{
 		bool isDefault = true;
@@ -22,7 +23,7 @@ namespace lux
 		glm::fvec4 env_color = {0.4f, 0.4f, 0.4f, 1.0f};
 
 		// Constructor
-		Scene() = default;
+		Scene();
 
 		// Getters
 		inline std::string GetSceneName() { return scene_name; }

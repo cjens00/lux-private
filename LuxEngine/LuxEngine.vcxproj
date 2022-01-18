@@ -152,11 +152,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\external\glad\src\glad.c" />
-    <ClCompile Include="src\Renderer\RenderObject.cpp" />
     <ClCompile Include="src\Core\Clock.cpp" />
     <ClCompile Include="src\Renderer\Shader.cpp" />
     <ClCompile Include="src\Renderer\Material.cpp" />
-    <ClCompile Include="src\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Input\Mouse.cpp" />
     <ClCompile Include="src\Input\Keyboard.cpp" />
     <ClCompile Include="src\Renderer\Model.cpp" />
@@ -177,12 +175,10 @@
     <ClInclude Include="include\Renderer\Model.h" />
     <ClInclude Include="include\Input\Keyboard.h" />
     <ClInclude Include="include\Input\Mouse.h" />
-    <ClInclude Include="include\Renderer\Mesh.h" />
     <ClInclude Include="include\Renderer\Material.h" />
     <ClInclude Include="include\Renderer\Shader.h" />
     <ClInclude Include="include\Core\Window.h" />
     <ClInclude Include="include\Renderer\Texture.h" />
-    <ClInclude Include="include\Renderer\RenderObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\flecs_static.lib" />

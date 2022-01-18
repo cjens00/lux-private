@@ -38,6 +38,7 @@ void lux::Renderer::DrawCurrentScene()
 	{
 		// Need some methods inside Scene to draw stuff
 		// "SubmitDrawData()" or something
+		current_scene.SubmitDrawData();
 	}
 	else
 	{

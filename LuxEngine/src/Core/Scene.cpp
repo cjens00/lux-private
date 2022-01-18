@@ -1,7 +1,12 @@
 #include <Core/Scene.h>
 
 
-// lux::Scene::Scene() {}
+lux::Scene::Scene()
+{
+	Model model = {};
+	model.LoadObj("res/assets/models/obj/default");
+	models.emplace_back(std::move(model));
+}
 
 void lux::Scene::SubmitDrawData()
 {

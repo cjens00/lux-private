@@ -61,11 +61,14 @@ void lux::Window::SetupCallbacks()
 	{
 		renderer.Update();
 	});
+	// clock.AddCallback(Clock_States::Start, [&]()
+	// {
+	// });
 }
 
 void lux::Window::Start()
 {
-	while(!glfwWindowShouldClose(*gl_window))
+	while (!glfwWindowShouldClose(*gl_window))
 	{
 		clock.Run();
 	}

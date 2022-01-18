@@ -1,6 +1,4 @@
-#include <iostream>
-
-#include "Core/Window.h"
+#include <Core/Window.h>
 
 int main()
 {

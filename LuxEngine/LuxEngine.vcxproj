@@ -170,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="include\Core\Clock.h" />
     <ClInclude Include="external\cgltf\cgltf.h" />
+    <ClInclude Include="include\External\TinyOBJ\tiny_obj_loader.h" />
     <ClInclude Include="include\Renderer\Framebuffer.h" />
     <ClInclude Include="include\Renderer\Renderer.h" />
     <ClInclude Include="include\Core\Scene.h" />
@@ -188,6 +189,7 @@
     <Library Include="lib\glfw3.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\External\TinyOBJ\LICENSE" />
     <None Include="lib\flecs_static.pdb" />
     <None Include="lib\glfw3.pdb" />
     <None Include="res\shaders\default_shader\frag.glsl" />
